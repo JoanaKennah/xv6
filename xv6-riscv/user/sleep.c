@@ -5,7 +5,7 @@ int main(int argc, char *argv[]) {
     if (argc == 1) {
         printf("Error, no parameters provided");
     }
-    atoi(argv[1]);
-    sys_pause(argv[1]);
+    int number = atoi(argv[2]);
+    pause(number);
     exit(0);
 }
