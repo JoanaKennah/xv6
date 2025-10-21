@@ -45,10 +45,15 @@ void find(char *path, char *expression) {
     p = buf + strlen(buf);
     *p++ = '/';
     while(read(fd, &de, sizeof(de)) == sizeof(de)) {
+      // Skip if no items are found, of if ’.’ or ’..’ found
+      // PLACE YOUR CODE HERE
       if (de.inum == 0 || strcmp(de.name, ".") == 0 || 
           strcmp(de.name, "..") == 0) { // ??
         continue;
       }
+      
+      // Move the name of the item to the end of the path in buff
+      // and call find() with the new path
       memmove(p, de.name, DIRSIZ);
       // Terminate the extended string.
       p[DIRSIZ] = '\0';
