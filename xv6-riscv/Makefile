@@ -144,6 +144,7 @@ UPROGS=\
 	$U/_dorphan\
 	$U/_hw\
 	$U/_sleep\
+	$U/_pingpong\
 	$U/_getyear\
 
 fs.img: mkfs/mkfs README $(UPROGS)
