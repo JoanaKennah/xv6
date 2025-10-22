@@ -2,6 +2,10 @@
 #include "kernel/param.h"
 #include "user/user.h"
 
+// the command specified as an argument to xargs is run as many times
+// as there are lines in the standard input,
+// each time with different data that is contained in a particular line
+
 void execute_line(char *line, char *args[], int skip) {
     int f = fork();
     if (f < 0) {
