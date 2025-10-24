@@ -13,6 +13,10 @@
 
 #define MAXARGS 10
 
+#define HISTORY_FILE ".history"
+#define MAX_HISTORY 500
+#define O_APPEND 0x400
+
 struct cmd {
   int type;
 };
@@ -163,6 +167,18 @@ main(void)
       cmd++;
     if (*cmd == '\n') // is a blank command
       continue;
+    int histfd = open(".history", O_WRONLY | O_CREATE | O_APPEND);
+    if (histfd >= 0) {
+      int len = strlen(cmd);
+      if (len > 0 && cmd[len-1] == '\n') {
+        cmd[len-1] = '\0';
+      write(histfd, cmd, strlen(cmd));
+      write(histfd, "\n", 1);
+      close(histfd);
+      } else {
+        fprintf(2, "history: could not open .history\n");
+      }
+    }
     if(cmd[0] == 'c' && cmd[1] == 'd' && cmd[2] == ' '){
       // Chdir must be called by the parent, not the child.
       cmd[strlen(cmd)-1] = 0;  // chop \n
