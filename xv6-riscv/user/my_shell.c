@@ -131,11 +131,12 @@ int main(void) {
   pipe(pcp);
 
   /* Read and run input commands. */
-  while(getcmd(buf, sizeof(buf)) >= 0){ // NEED TO EDIT FOR SPECIAL CASES AND EXECUTE THE COMMAND INPUTTED
+  while(getcmd(buf, sizeof(buf)) >= 0){
     if (buf[0] == 0) {
       continue;
     }
 
+    // to check for cd input (need to edit later to allow execution of some type)
     if (strncmp(buf, "cd", 2) == 0 && (buf[2] == ' ' || buf[2] == 0)) {
       char *path = buf + 2;
       while (*path == ' ') path++;
