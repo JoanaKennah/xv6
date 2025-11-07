@@ -149,6 +149,7 @@ UPROGS=\
 	$U/_getyear\
 	$U/_xargs\
 	$U/_history\
+	$U/_my_shell\
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)
