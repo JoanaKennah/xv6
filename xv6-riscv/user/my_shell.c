@@ -7,8 +7,25 @@
 int getcmd(char *buf, int nbuf) {
 
   // ##### Place your code here
+  write(2, ">>>", 4); // prompt user
 
-  return 0;
+  memset(buf, 0, nbuf);
+  if (gets(buf, nbuf) == 0) { // error catch
+    return -1;
+  }
+
+  int len = strlen(buf); // to rid of new lines
+  if (len > 0 && buf[len-1] == '\n') {
+    buf[len-1] = 0;
+  }
+
+  int start = 0; // to rid of empty spaces in prompt
+  while (buf[start] == ' ' || buf[start] == '\t') start++;
+  if (start > 0) {
+    memmove(buf, buf + start, strlen(buf + start) + 1);
+  }
+
+  return strlen(buf);
 }
 
 /*
@@ -114,7 +131,7 @@ int main(void) {
   pipe(pcp);
 
   /* Read and run input commands. */
-  while(getcmd(buf, sizeof(buf)) >= 0){
+  while(getcmd(buf, sizeof(buf)) >= 0){ // NEED TO EDIT FOR SPECIAL CASES AND EXECUTE THE COMMAND INPUTTED
     if(fork() == 0)
       run_command(buf, 100, pcp);
 
