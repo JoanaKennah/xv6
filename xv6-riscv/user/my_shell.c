@@ -132,6 +132,19 @@ int main(void) {
 
   /* Read and run input commands. */
   while(getcmd(buf, sizeof(buf)) >= 0){ // NEED TO EDIT FOR SPECIAL CASES AND EXECUTE THE COMMAND INPUTTED
+    if (buf[0] == 0) {
+      continue;
+    }
+
+    if (strncmp(buf, "cd", 2) == 0 && (buf[2] == ' ' || buf[2] == 0)) {
+      char *path = buf + 2;
+      while (*path == ' ') path++;
+      if (chdir(path) < 0) {
+        fprintf(2, "cd: cannot cd%s\n", path);
+      continue;
+      }
+    }
+    
     if(fork() == 0)
       run_command(buf, 100, pcp);
 
@@ -139,6 +152,9 @@ int main(void) {
       Check if run_command found this is
       a CD command and run it if required.
     */
+
+    wait(0); // can remove later after child_status is used
+
     int child_status;
     // ##### Place your code here
   }
