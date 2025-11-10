@@ -56,7 +56,7 @@ void run_command(char *buf, int nbuf, int *pcp) {
   /* Flag to mark sequence command */
   int sequence_cmd = 0;
 
-  int i = 0;
+  int i = 0; // EDIT CODE HERE----------------------------------------------------------------------------------------------------------
   /* Parse the command character by character. */
   for (; i < nbuf; i++) {
 
@@ -80,7 +80,7 @@ void run_command(char *buf, int nbuf, int *pcp) {
     Sequence command. Continue this command in a new process.
     Wait for it to complete and execute the command following ';'.
   */
-  if (sequence_cmd) {
+  if (sequence_cmd) { // EDIT CODE HERE----------------------------------------------------------------------------------------------------------
     sequence_cmd = 0;
     if (fork() != 0) {
       wait(0);
@@ -107,8 +107,13 @@ void run_command(char *buf, int nbuf, int *pcp) {
     and exit with '2' to tell the parent process about this.
   */
   if (strcmp(arguments[0], "cd") == 0) {
-    // ##### Place your code here.
-  } else {
+    if (numargs < 2) {
+      fprintf(2, "cd has a missing argument\n");
+    } else {
+      write(pcp[1], arguments[1], strlen(arguments[1]) + 1);
+    }
+    exit(2); // parent handles cd
+  } else { // EDIT CODE HERE----------------------------------------------------------------------------------------------------------
     /*
       Pipe command: fork twice. Execute the left hand side directly.
       Call run_command recursion for the right side of the pipe.
@@ -141,7 +146,7 @@ int main(void) {
       char *path = buf + 2;
       while (*path == ' ') path++;
       if (chdir(path) < 0) {
-        fprintf(2, "cd: cannot cd%s\n", path);
+        fprintf(2, "cd cannot cd%s\n", path);
       continue;
       }
     }
@@ -156,8 +161,16 @@ int main(void) {
 
     wait(0); // can remove later after child_status is used
 
-    int child_status;
+    int child_status; // EDIT CODE HERE----------------------------------------------------------------------------------------------------------
     // ##### Place your code here
+
+    if (child_status == 2) {
+      char path[100];
+      int n = read(pcp[0], path, sizeOf(path));
+      if (n > 0) {
+        chdir(path);
+      }
+    }
   }
   exit(0);
 }
