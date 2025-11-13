@@ -142,7 +142,7 @@ void run_command(char *buf, int nbuf, int *pcp) {
     Sequence command. Continue this command in a new process.
     Wait for it to complete and execute the command following ';'.
   */
-  if (sequence_cmd) { // EDIT CODE HERE----------------------------------------------------------------------------------------------------------
+  if (sequence_cmd) {
     sequence_cmd = 0;
     if (fork() != 0) {
       wait(0);
@@ -193,7 +193,7 @@ void run_command(char *buf, int nbuf, int *pcp) {
     If this command is a CD command, write the arguments to the pcp pipe
     and exit with '2' to tell the parent process about this.
   */
-  if (strcmp(arguments[0], "cd") == 0) { // EDIT CODE TO ALLOW CD IN CERTAIN WAYS ================================================================
+  if (strcmp(arguments[0], "cd") == 0) {
     if (numargs < 2) {
       fprintf(2, "cd has a missing argument\n");
     } else {
