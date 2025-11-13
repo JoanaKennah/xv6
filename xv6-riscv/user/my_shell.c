@@ -194,12 +194,13 @@ void run_command(char *buf, int nbuf, int *pcp) {
     and exit with '2' to tell the parent process about this.
   */
   if (strcmp(arguments[0], "cd") == 0) {
-    if (numargs < 2) {
+    if (arguments[1] == 0) {
       fprintf(2, "cd has a missing argument\n");
+      exit(0);
     } else {
-      write(pcp[1], arguments[1], strlen(arguments[1]) + 1);
+      write(pcp[1], arguments[1], strlen(arguments[1]));
+      exit(2); // parent handles cd
     }
-    exit(2); // parent handles cd
   } else {
     /*
       Pipe command: fork twice. Execute the left hand side directly.
