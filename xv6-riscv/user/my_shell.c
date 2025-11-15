@@ -66,7 +66,7 @@ void run_command(char *buf, int nbuf, int *pcp) {
 
     /* ##### Place your code here. */
 
-    if (buf[i] == ' ') {
+    if (buf[i] == ' ' || buf[i] == '\t') {
       if (!we) {
         buf[i] = 0;
         we = 1;
@@ -76,8 +76,9 @@ void run_command(char *buf, int nbuf, int *pcp) {
     }
 
     if (buf[i] == ';') {
-      buf[1] = 0;
+      buf[i] = 0;
       sequence_cmd = 1;
+      strcpy(right_cmd, &buf[i+1]);
       break;
     }
 
@@ -107,14 +108,14 @@ void run_command(char *buf, int nbuf, int *pcp) {
     if (!(redirection_left || redirection_right)) {
       /* No redirection, continue parsing command. */
       // Place your code here.
-      if (buf[i] == ' ') {
-        if (!we) {
-          buf[i] = 0;
-          we = 1;
-          ws = 1;
-        }
-        continue;
-      }
+      // if (buf[i] == ' ') {
+        // if (!we) {
+          // buf[i] = 0;
+          // we = 1;
+          // ws = 1;
+        // }
+        // continue;
+      // }
       if (ws) {
         arguments[numargs++] = &buf[i];
         ws = 0;
@@ -130,11 +131,11 @@ void run_command(char *buf, int nbuf, int *pcp) {
           file_name_r = &buf[i];
         }
 
-        if (buf[i] == ' ' || buf[i] == '\t') {
-          buf[i] = 0;
-          ws = 1;
-          we = 1;
-        }
+        // if (buf[i] == ' ' || buf[i] == '\t') {
+          // buf[i] = 0;
+          // ws = 1;
+          // we = 1;
+        // }
       }
     }
   }
@@ -145,19 +146,24 @@ void run_command(char *buf, int nbuf, int *pcp) {
   if (sequence_cmd) {
     sequence_cmd = 0;
     if (fork() != 0) {
-      wait(0);
+      run_command(buf, nbuf, pcp);
+      
+      // wait(0);
       // ##### Place your code here.
       // Call run_command recursively
-      char *next_cmd = strchr(buf, ';');
-      if (next_cmd) {
-        *next_cmd = 0;
-        if (fork() == 0) {
-          run_command(buf, nbuf, pcp);
-        }
-        wait(0);
-        run_command(next_cmd + 1, nbuf, pcp);
-      }
+      // char *next_cmd = strchr(buf, ';');
+      // if (next_cmd) {
+        // *next_cmd = 0;
+        // if (fork() == 0) {
+          // run_command(buf, nbuf, pcp);
+        // }
+        // wait(0);
+        // run_command(next_cmd + 1, nbuf, pcp);
+      // }
     }
+    wait(0);
+    run_command(right_cmd, nbuf, pcp);
+    exit(0);
   }
 
   /*
@@ -234,7 +240,7 @@ void run_command(char *buf, int nbuf, int *pcp) {
       // ##### Place your code here.
       // Simple command; call exec()
       exec(arguments[0], arguments);
-      fprintf(2, "Exec %s failed\n", arguments[0]);
+      fprintf(2, "Exec failed for %s\n", arguments[0]); // PART4.3 ISSUE ------------------------------------------------------------------------
       exit(1);
     }
   }
