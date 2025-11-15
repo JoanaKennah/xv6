@@ -87,6 +87,18 @@ void run_command(char *buf, int nbuf, int *pcp) {
       redirection_left = 1;
       we = 1;
       ws = 1;
+      i++;
+      while (buf[i] == ' ' || buf[i] == '\t') i++;
+      file_name_l = &buf[i];
+      int j = i;
+      while (buf[j] != 0 && buf[j] != ' ' 
+        && buf[j] != '\t' && buf[j] != '<' 
+        && buf[j] != '>' && buf[j] != '|' 
+        && buf[j] != ';') {
+        j++;
+      }
+      buf[j] = 0;
+      i = j;
       continue;
     }
 
@@ -95,6 +107,18 @@ void run_command(char *buf, int nbuf, int *pcp) {
       redirection_right = 1;
       we = 1;
       ws = 1;
+      i++;
+      while (buf[i] == ' ' || buf[i] == '\t') i++;
+      file_name_r = &buf[i];
+      int j = i;
+      while (buf[j] != 0 && buf[j] != ' ' 
+        && buf[j] != '\t' && buf[j] != '<' 
+        && buf[j] != '>' && buf[j] != '|' 
+        && buf[j] != ';') {
+        j++;
+      }
+      buf[j] = 0;
+      i = j;
       continue;
     }
 
@@ -220,6 +244,7 @@ void run_command(char *buf, int nbuf, int *pcp) {
         dup(p[1]);
         close(p[0]);
         close(p[1]);
+        arguments[numargs] = 0;
         exec(arguments[0], arguments);
         fprintf(2, "Exec failed for %s\n", arguments[0]);
         exit(1);
@@ -239,6 +264,7 @@ void run_command(char *buf, int nbuf, int *pcp) {
     } else {
       // ##### Place your code here.
       // Simple command; call exec()
+      arguments[numargs] = 0;
       exec(arguments[0], arguments);
       fprintf(2, "Exec failed for %s\n", arguments[0]); // PART4.3 ISSUE ------------------------------------------------------------------------
       exit(1);
