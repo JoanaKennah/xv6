@@ -7,7 +7,7 @@
 int getcmd(char *buf, int nbuf) {
 
   // ##### Place your code here
-  write(2, ">>>", 4); // prompt user
+  write(2, ">>> ", 4); // prompt user
 
   memset(buf, 0, nbuf);
   if (gets(buf, nbuf) == 0) { // error catch
