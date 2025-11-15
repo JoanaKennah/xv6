@@ -66,7 +66,7 @@ void run_command(char *buf, int nbuf, int *pcp) {
 
     /* ##### Place your code here. */
 
-    if (buf[i] == ' ' || buf[i] == '\t') {
+    if (buf[i] == ' ' || buf[i] == '\t') { // new words or empty spaces or new lines
       if (!we) {
         buf[i] = 0;
         we = 1;
@@ -75,14 +75,14 @@ void run_command(char *buf, int nbuf, int *pcp) {
       continue;
     }
 
-    if (buf[i] == ';') {
+    if (buf[i] == ';') { // ; operator
       buf[i] = 0;
       sequence_cmd = 1;
       strcpy(right_cmd, &buf[i+1]);
       break;
     }
 
-    if (buf[i] == '<') {
+    if (buf[i] == '<') { // redirection left
       buf[i] = 0;
       redirection_left = 1;
       we = 1;
@@ -90,7 +90,7 @@ void run_command(char *buf, int nbuf, int *pcp) {
       continue;
     }
 
-    if (buf[i] == '>') {
+    if (buf[i] == '>') { // redirection right
       buf[i] = 0;
       redirection_right = 1;
       we = 1;
@@ -98,7 +98,7 @@ void run_command(char *buf, int nbuf, int *pcp) {
       continue;
     }
 
-    if (buf[i] == '|') {
+    if (buf[i] == '|') { // pipes
       buf[i] = 0;
       pipe_cmd = 1;
       strcpy(right_cmd, &buf[i+1]);
